@@ -42,6 +42,7 @@ function _RichTextEditor(
     height = 300,
     hint,
     dir = currentDirection(),
+    toolbarProps = { sticky: true, stickyOffset: 60 },
     ...props
   }: RichTextEditorInputProps,
   ref: any
@@ -197,7 +198,7 @@ function _RichTextEditor(
             },
           })}
         >
-          <BaseRichTextEditor.Toolbar sticky stickyOffset={60}>
+          <BaseRichTextEditor.Toolbar {...toolbarProps}>
             <BaseRichTextEditor.ControlsGroup>
               <BaseRichTextEditor.Bold />
               <BaseRichTextEditor.Italic />

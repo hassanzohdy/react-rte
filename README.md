@@ -22,11 +22,21 @@ The package requires peer dependencies, so you need to install them as well:
 
 ```tsx
 import { RichTextEditor } from '@mongez/react-rte';
+import { useState } from 'react';
 
-<RichTextEditor
-    value={value}
-    onChange={setValue}
-/>
+export function App() {
+    const [value, setValue] = useState('');
+
+    return (    
+        <RichTextEditor
+            value={value}
+            onChange={setValue}
+            placeholder="Type here..."
+            label="Content"
+            required
+        />
+    );
+}
 ```
 
 The Component by default uses the following:
@@ -39,6 +49,21 @@ The Component by default uses the following:
 - Link
 - Font Style
 - Lists
+
+## Available Props
+
+The following table shows all available props:
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | `''` | The value of the editor, used for controlled value |
+| `onChange` | `(value: string) => void` | `() => {}` | The function to be called when the value changes |
+| `placeholder` | `string` | `''` | The placeholder of the editor |
+| `label` | `string` | `''` | The label of the editor |
+| `required` | `boolean` | `false` | Whether the editor is required or not |
+| `defaultValue` | `string` | `''` | The default value of the editor, used for uncontrolled value |
+| `hint` | `string` | `''` | Display a hint message below the label |
+| `toolbarProps` | `ToolbarProps` | `{}` | The props of the toolbar, see [Mantine ToolbarProps](https://mantine.dev/others/tiptap/#sticky-toolbar) |
 
 ## Using as reactive form component
 
