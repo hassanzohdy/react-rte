@@ -49,7 +49,7 @@ function _RichTextEditor(
 ) {
   const {
     value,
-    onChange,
+    changeValue,
     error,
     otherProps,
     disabled,
@@ -57,10 +57,6 @@ function _RichTextEditor(
     id,
     visibleElementRef,
   } = useFormControl(props);
-
-  const changeValue = (value: string) => {
-    onChange(value);
-  };
 
   const editor = useEditor({
     content: value,
