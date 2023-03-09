@@ -59,6 +59,8 @@ function _RichTextEditor(
     visibleElementRef,
   } = useFormControl(props);
 
+  console.log(name, value);
+
   const editor = useEditor({
     content: value,
     onUpdate: ({ editor }) => {
@@ -74,7 +76,7 @@ function _RichTextEditor(
 
       changeValue(value);
     },
-    autofocus: props.autofocus,
+    autofocus: props.autofocus === true,
     editable: !disabled,
     extensions: [
       Placeholder.configure({
