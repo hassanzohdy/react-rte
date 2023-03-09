@@ -10,7 +10,7 @@ import {
   uploadsHandler,
 } from "@mongez/moonlight";
 import {
-  FormInputProps,
+  FormControlProps,
   requiredRule,
   useFormControl,
 } from "@mongez/react-form";
@@ -24,10 +24,10 @@ import Underline from "@tiptap/extension-underline";
 import Youtube from "@tiptap/extension-youtube";
 import { EditorOptions, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import React, { useEffect } from "react";
 import "./RichTextEditor.scss";
 
-type RichTextEditorInputProps = FormInputProps &
+type RichTextEditorInputProps = FormControlProps &
   Partial<EditorOptions> & {
     description?: React.ReactNode;
     height?: React.CSSProperties["height"];
@@ -45,7 +45,7 @@ function _RichTextEditor(
     toolbarProps = { sticky: true, stickyOffset: 60 },
     ...props
   }: RichTextEditorInputProps,
-  ref: any
+  ref: any,
 ) {
   const {
     value,
@@ -53,8 +53,9 @@ function _RichTextEditor(
     error,
     otherProps,
     disabled,
-    // formControl,
+    name,
     id,
+    formControl,
     visibleElementRef,
   } = useFormControl(props);
 
@@ -96,15 +97,15 @@ function _RichTextEditor(
     ...otherProps,
   });
 
-  // useEffect(() => {
-  //   if (!editor) return;
+  useEffect(() => {
+    if (!editor) return;
 
-  //   const onReset = formControl.on("reset", () => {
-  //     editor.commands.setContent(emptyValue);
-  //   });
+    const onReset = formControl.onReset(() => {
+      editor.commands.setContent(emptyValue);
+    });
 
-  //   return () => onReset.unsubscribe();
-  // }, [editor, formControl]);
+    return () => onReset.unsubscribe();
+  }, [editor, formControl]);
 
   if (!editor) return null;
 
@@ -112,6 +113,7 @@ function _RichTextEditor(
     e.preventDefault();
     e.stopPropagation();
   };
+
   const handleDragLeave = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
@@ -147,7 +149,7 @@ function _RichTextEditor(
     }
 
     uploadFiles(formData)
-      .then((response) => {
+      .then(response => {
         const files = uploadsHandler.resolveResponse(response);
 
         editor.view.focus();
@@ -156,7 +158,7 @@ function _RichTextEditor(
 
         loading.success(trans("success"), trans("filesUploaded"));
       })
-      .catch((error) => {
+      .catch(error => {
         loading.error(trans("error"), parseError(error));
       });
   };
@@ -166,8 +168,7 @@ function _RichTextEditor(
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-    >
+      onDragLeave={handleDragLeave}>
       <InputWrapper
         visibleElementRef={visibleElementRef}
         error={error}
@@ -182,8 +183,7 @@ function _RichTextEditor(
           },
         }}
         description={description}
-        required={props.required}
-      >
+        required={props.required}>
         <BaseRichTextEditor
           editor={editor}
           itemRef={ref}
@@ -192,8 +192,7 @@ function _RichTextEditor(
               height,
               overflowY: "auto",
             },
-          })}
-        >
+          })}>
           <BaseRichTextEditor.Toolbar {...toolbarProps}>
             <BaseRichTextEditor.ControlsGroup>
               <BaseRichTextEditor.Bold />

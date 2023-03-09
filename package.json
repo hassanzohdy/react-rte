@@ -1,10 +1,10 @@
 {
     "name": "@mongez/react-rte",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "A wrapper for Rich Text Editor React Component.",
     "main": "src/index.ts",
     "dependencies": {
-        "@mantine/tiptap": "^6.0.0",
+        "@mantine/tiptap": "^6.0.1",
         "@tiptap/extension-color": "^2.0.0-beta.220",
         "@tiptap/extension-font-family": "^2.0.0-beta.220",
         "@tiptap/extension-highlight": "^2.0.0-beta.220",
