@@ -1,8 +1,8 @@
-import { Link, RichTextEditor as BaseRichTextEditor } from "@mantine/tiptap";
+import { RichTextEditor as BaseRichTextEditor, Link } from "@mantine/tiptap";
 import { trans } from "@mongez/localization";
 import {
-  currentDirection,
   InputWrapper,
+  currentDirection,
   parseError,
   toastError,
   toastLoading,
@@ -45,7 +45,7 @@ function _RichTextEditor(
     toolbarProps = { sticky: true, stickyOffset: 60 },
     ...props
   }: RichTextEditorInputProps,
-  ref: any,
+  ref: any
 ) {
   const {
     value,
@@ -58,8 +58,6 @@ function _RichTextEditor(
     formControl,
     visibleElementRef,
   } = useFormControl(props);
-
-  console.log(name, value);
 
   const editor = useEditor({
     content: value,
@@ -151,7 +149,7 @@ function _RichTextEditor(
     }
 
     uploadFiles(formData)
-      .then(response => {
+      .then((response) => {
         const files = uploadsHandler.resolveResponse(response);
 
         editor.view.focus();
@@ -160,7 +158,7 @@ function _RichTextEditor(
 
         loading.success(trans("success"), trans("filesUploaded"));
       })
-      .catch(error => {
+      .catch((error) => {
         loading.error(trans("error"), parseError(error));
       });
   };
@@ -170,7 +168,8 @@ function _RichTextEditor(
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}>
+      onDragLeave={handleDragLeave}
+    >
       <InputWrapper
         visibleElementRef={visibleElementRef}
         error={error}
@@ -185,7 +184,8 @@ function _RichTextEditor(
           },
         }}
         description={description}
-        required={props.required}>
+        required={props.required}
+      >
         <BaseRichTextEditor
           editor={editor}
           itemRef={ref}
@@ -194,7 +194,8 @@ function _RichTextEditor(
               height,
               overflowY: "auto",
             },
-          })}>
+          })}
+        >
           <BaseRichTextEditor.Toolbar {...toolbarProps}>
             <BaseRichTextEditor.ControlsGroup>
               <BaseRichTextEditor.Bold />
