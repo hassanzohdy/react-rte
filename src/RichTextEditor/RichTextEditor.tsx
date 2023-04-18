@@ -69,7 +69,7 @@ function _RichTextEditor(
       }
 
       if (dir === "rtl") {
-        value = `<p dir="rtl">${value}</p>`;
+        value = `<span dir="rtl">${value}</span>`;
       }
 
       changeValue(value);

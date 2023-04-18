@@ -80,3 +80,8 @@ createReactiveForm(reactiveForm => {
     ]);
 })
 ```
+
+## TODO
+
+- Expose toolbar configurations per component or globally.
+- Expose extensions.
