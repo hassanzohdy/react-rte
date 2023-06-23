@@ -21,17 +21,46 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
+import SuperScript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import { EditorOptions, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useEffect } from "react";
 import "./RichTextEditor.scss";
 
+const toolbarComponents = {
+  bold: BaseRichTextEditor.Bold,
+  italic: BaseRichTextEditor.Italic,
+  underline: BaseRichTextEditor.Underline,
+  strikethrough: BaseRichTextEditor.Strikethrough,
+  highlight: BaseRichTextEditor.Highlight,
+  code: BaseRichTextEditor.Code,
+  clearFormat: BaseRichTextEditor.ClearFormatting,
+  superscript: BaseRichTextEditor.SuperScript,
+  subscript: BaseRichTextEditor.SubScript,
+  link: BaseRichTextEditor.Link,
+  image: BaseRichTextEditor.Image,
+  bulletList: BaseRichTextEditor.BulletList,
+  orderedList: BaseRichTextEditor.OrderedList,
+  h1: BaseRichTextEditor.H1,
+  h2: BaseRichTextEditor.H2,
+  h3: BaseRichTextEditor.H3,
+  h4: BaseRichTextEditor.H4,
+  h5: BaseRichTextEditor.H5,
+  h6: BaseRichTextEditor.H6,
+  color: BaseRichTextEditor.ColorPicker,
+  youtube: BaseRichTextEditor.Youtube,
+  // undo: BaseRichTextEditor.Undo,
+  // redo: BaseRichTextEditor.Redo,
+}
+
 type RichTextEditorInputProps = FormControlProps &
   Partial<EditorOptions> & {
     description?: React.ReactNode;
     height?: React.CSSProperties["height"];
     hint?: React.ReactNode;
+    // toolbar?: 
   };
 
 const emptyValue = "<p></p>";
@@ -82,6 +111,8 @@ function _RichTextEditor(
       }),
       StarterKit,
       Underline,
+      SuperScript,
+      SubScript,
       Link,
       Color,
       TextStyle,
