@@ -53,14 +53,14 @@ const toolbarComponents = {
   youtube: BaseRichTextEditor.Youtube,
   // undo: BaseRichTextEditor.Undo,
   // redo: BaseRichTextEditor.Redo,
-}
+};
 
 type RichTextEditorInputProps = FormControlProps &
   Partial<EditorOptions> & {
     description?: React.ReactNode;
     height?: React.CSSProperties["height"];
     hint?: React.ReactNode;
-    // toolbar?: 
+    // toolbar?:
   };
 
 const emptyValue = "<p></p>";
@@ -298,13 +298,6 @@ function _RichTextEditor(
             <BaseRichTextEditor.ControlsGroup>
               <BaseRichTextEditor.Link />
               <BaseRichTextEditor.Unlink />
-            </BaseRichTextEditor.ControlsGroup>
-
-            <BaseRichTextEditor.ControlsGroup>
-              <BaseRichTextEditor.AlignLeft />
-              <BaseRichTextEditor.AlignCenter />
-              <BaseRichTextEditor.AlignJustify />
-              <BaseRichTextEditor.AlignRight />
             </BaseRichTextEditor.ControlsGroup>
           </BaseRichTextEditor.Toolbar>
 
