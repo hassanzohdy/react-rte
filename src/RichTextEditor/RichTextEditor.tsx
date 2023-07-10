@@ -18,16 +18,26 @@ import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import SubScript from "@tiptap/extension-subscript";
+import SuperScript from "@tiptap/extension-superscript";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
-import SuperScript from "@tiptap/extension-superscript";
-import SubScript from "@tiptap/extension-subscript";
 import Youtube from "@tiptap/extension-youtube";
 import { EditorOptions, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useEffect } from "react";
 import "./RichTextEditor.scss";
+import {
+  BackColor,
+  BackgroundColorButton,
+  ChemicalSymbolsButton,
+  TableButton,
+} from "./controls";
 
 const toolbarComponents = {
   bold: BaseRichTextEditor.Bold,
@@ -37,10 +47,10 @@ const toolbarComponents = {
   highlight: BaseRichTextEditor.Highlight,
   code: BaseRichTextEditor.Code,
   clearFormat: BaseRichTextEditor.ClearFormatting,
-  superscript: BaseRichTextEditor.SuperScript,
-  subscript: BaseRichTextEditor.SubScript,
+  superscript: BaseRichTextEditor.Superscript,
+  subscript: BaseRichTextEditor.Subscript,
   link: BaseRichTextEditor.Link,
-  image: BaseRichTextEditor.Image,
+  // image: BaseRichTextEditor.Image,
   bulletList: BaseRichTextEditor.BulletList,
   orderedList: BaseRichTextEditor.OrderedList,
   h1: BaseRichTextEditor.H1,
@@ -50,9 +60,10 @@ const toolbarComponents = {
   h5: BaseRichTextEditor.H5,
   h6: BaseRichTextEditor.H6,
   color: BaseRichTextEditor.ColorPicker,
-  youtube: BaseRichTextEditor.Youtube,
-  // undo: BaseRichTextEditor.Undo,
+  // undo: BaseRichTextEditor.Undo
   // redo: BaseRichTextEditor.Redo,
+  table: TableButton,
+  chemicalSymbols: ChemicalSymbolsButton,
 };
 
 type RichTextEditorInputProps = FormControlProps &
@@ -74,7 +85,7 @@ function _RichTextEditor(
     toolbarProps = { sticky: true, stickyOffset: 60 },
     ...props
   }: RichTextEditorInputProps,
-  ref: any
+  ref: any,
 ) {
   const {
     value,
@@ -82,7 +93,6 @@ function _RichTextEditor(
     error,
     otherProps,
     disabled,
-    name,
     id,
     formControl,
     visibleElementRef,
@@ -117,6 +127,7 @@ function _RichTextEditor(
       Color,
       TextStyle,
       Youtube,
+      BackColor.configure(),
       TextAlign.configure({ types: ["heading", "paragraph", "list"] }),
       Image.configure({
         inline: true,
@@ -124,6 +135,13 @@ function _RichTextEditor(
       Highlight.configure({
         multicolor: true,
       }),
+
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     ...otherProps,
   });
@@ -180,7 +198,7 @@ function _RichTextEditor(
     }
 
     uploadFiles(formData)
-      .then((response) => {
+      .then(response => {
         const files = uploadsHandler.resolveResponse(response);
 
         editor.view.focus();
@@ -189,18 +207,18 @@ function _RichTextEditor(
 
         loading.success(trans("success"), trans("filesUploaded"));
       })
-      .catch((error) => {
+      .catch(error => {
         loading.error(trans("error"), parseError(error));
       });
   };
 
   return (
     <div
+      className="richTextEditorRoot"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-    >
+      onDragLeave={handleDragLeave}>
       <InputWrapper
         visibleElementRef={visibleElementRef}
         error={error}
@@ -208,15 +226,13 @@ function _RichTextEditor(
         id={id}
         hint={hint}
         label={props.label}
-        className="richTextEditorRoot"
         labelProps={{
           onClick: () => {
             editor.view.focus();
           },
         }}
         description={description}
-        required={props.required}
-      >
+        required={props.required}>
         <BaseRichTextEditor
           editor={editor}
           itemRef={ref}
@@ -225,8 +241,7 @@ function _RichTextEditor(
               height,
               overflowY: "auto",
             },
-          })}
-        >
+          })}>
           <BaseRichTextEditor.Toolbar {...toolbarProps}>
             <BaseRichTextEditor.ControlsGroup>
               <BaseRichTextEditor.Bold />
@@ -265,6 +280,7 @@ function _RichTextEditor(
                   "#fd7e14",
                 ]}
               />
+              <BackgroundColorButton />
             </BaseRichTextEditor.ControlsGroup>
 
             <BaseRichTextEditor.ControlsGroup>
@@ -284,6 +300,11 @@ function _RichTextEditor(
               <BaseRichTextEditor.AlignCenter />
               <BaseRichTextEditor.AlignJustify />
               <BaseRichTextEditor.AlignRight />
+            </BaseRichTextEditor.ControlsGroup>
+
+            <BaseRichTextEditor.ControlsGroup>
+              <TableButton />
+              <ChemicalSymbolsButton />
             </BaseRichTextEditor.ControlsGroup>
 
             <BaseRichTextEditor.ControlsGroup>

@@ -1,6 +1,6 @@
 {
     "name": "@mongez/react-rte",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "A wrapper for Rich Text Editor React Component.",
     "main": "src/index.ts",
     "dependencies": {
@@ -17,6 +17,10 @@
         "@tiptap/extension-youtube": "^2.0.3",
         "@tiptap/extension-subscript": "^2.0.3",
         "@tiptap/extension-superscript": "^2.0.3",
+        "@tiptap/extension-table": "^2.0.3",
+        "@tiptap/extension-table-cell": "^2.0.3",
+        "@tiptap/extension-table-header": "^2.0.3",
+        "@tiptap/extension-table-row": "^2.0.3",
         "@tiptap/react": "^2.0.3",
         "@tiptap/starter-kit": "^2.0.3",
         "@tiptap/pm": "^2.0.3",
