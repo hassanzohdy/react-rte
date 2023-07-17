@@ -1,6 +1,6 @@
 {
     "name": "@mongez/react-rte",
-    "version": "1.0.15",
+    "version": "1.0.16",
     "description": "A wrapper for Rich Text Editor React Component.",
     "main": "src/index.ts",
     "dependencies": {
