@@ -1,14 +1,5 @@
 import { RichTextEditor as BaseRichTextEditor, Link } from "@mantine/tiptap";
-import { trans } from "@mongez/localization";
-import {
-  InputWrapper,
-  currentDirection,
-  parseError,
-  toastError,
-  toastLoading,
-  uploadFiles,
-  uploadsHandler,
-} from "@mongez/moonlight";
+import { currentDirection, InputWrapper } from "@mongez/moonlight";
 import {
   FormControlProps,
   requiredRule,
@@ -16,7 +7,6 @@ import {
 } from "@mongez/react-form";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import SubScript from "@tiptap/extension-subscript";
 import SuperScript from "@tiptap/extension-superscript";
@@ -31,40 +21,43 @@ import Youtube from "@tiptap/extension-youtube";
 import { EditorOptions, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useEffect } from "react";
-import "./RichTextEditor.scss";
+import { ImageManager } from "./ImageManager";
+// import "./RichTextEditor.scss";
 import {
   BackColor,
   BackgroundColorButton,
   ChemicalSymbolsButton,
   TableButton,
 } from "./controls";
+import { useUploader } from "./hooks";
+import classes from "./RichTextEditor.module.scss";
 
-const toolbarComponents = {
-  bold: BaseRichTextEditor.Bold,
-  italic: BaseRichTextEditor.Italic,
-  underline: BaseRichTextEditor.Underline,
-  strikethrough: BaseRichTextEditor.Strikethrough,
-  highlight: BaseRichTextEditor.Highlight,
-  code: BaseRichTextEditor.Code,
-  clearFormat: BaseRichTextEditor.ClearFormatting,
-  superscript: BaseRichTextEditor.Superscript,
-  subscript: BaseRichTextEditor.Subscript,
-  link: BaseRichTextEditor.Link,
-  // image: BaseRichTextEditor.Image,
-  bulletList: BaseRichTextEditor.BulletList,
-  orderedList: BaseRichTextEditor.OrderedList,
-  h1: BaseRichTextEditor.H1,
-  h2: BaseRichTextEditor.H2,
-  h3: BaseRichTextEditor.H3,
-  h4: BaseRichTextEditor.H4,
-  h5: BaseRichTextEditor.H5,
-  h6: BaseRichTextEditor.H6,
-  color: BaseRichTextEditor.ColorPicker,
-  // undo: BaseRichTextEditor.Undo
-  // redo: BaseRichTextEditor.Redo,
-  table: TableButton,
-  chemicalSymbols: ChemicalSymbolsButton,
-};
+// const _toolbarComponents = {
+//   bold: BaseRichTextEditor.Bold,
+//   italic: BaseRichTextEditor.Italic,
+//   underline: BaseRichTextEditor.Underline,
+//   strikethrough: BaseRichTextEditor.Strikethrough,
+//   highlight: BaseRichTextEditor.Highlight,
+//   code: BaseRichTextEditor.Code,
+//   clearFormat: BaseRichTextEditor.ClearFormatting,
+//   superscript: BaseRichTextEditor.Superscript,
+//   subscript: BaseRichTextEditor.Subscript,
+//   link: BaseRichTextEditor.Link,
+//   // image: BaseRichTextEditor.Image,
+//   bulletList: BaseRichTextEditor.BulletList,
+//   orderedList: BaseRichTextEditor.OrderedList,
+//   h1: BaseRichTextEditor.H1,
+//   h2: BaseRichTextEditor.H2,
+//   h3: BaseRichTextEditor.H3,
+//   h4: BaseRichTextEditor.H4,
+//   h5: BaseRichTextEditor.H5,
+//   h6: BaseRichTextEditor.H6,
+//   color: BaseRichTextEditor.ColorPicker,
+//   // undo: BaseRichTextEditor.Undo
+//   // redo: BaseRichTextEditor.Redo,
+//   table: TableButton,
+//   chemicalSymbols: ChemicalSymbolsButton,
+// };
 
 type RichTextEditorInputProps = FormControlProps &
   Partial<EditorOptions> & {
@@ -127,10 +120,14 @@ function _RichTextEditor(
       Color,
       TextStyle,
       Youtube,
-      BackColor.configure(),
-      TextAlign.configure({ types: ["heading", "paragraph", "list"] }),
-      Image.configure({
+      ImageManager.configure({
         inline: true,
+        allowBase64: true,
+      }),
+      BackColor.configure(),
+      TextAlign.configure({
+        types: ["heading", "paragraph", "list"],
+        defaultAlignment: "",
       }),
       Highlight.configure({
         multicolor: true,
@@ -146,6 +143,9 @@ function _RichTextEditor(
     ...otherProps,
   });
 
+  const { handleDragEnter, handleDragLeave, handleDragOver, handleDrop } =
+    useUploader(editor);
+
   useEffect(() => {
     if (!editor) return;
 
@@ -158,63 +158,9 @@ function _RichTextEditor(
 
   if (!editor) return null;
 
-  const handleDragEnter = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDragLeave = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDragOver = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const files: File[] = e.dataTransfer.files;
-
-    for (const file of files) {
-      if (!file.type.startsWith("image/")) {
-        toastError(trans("invalidImageFile"));
-        continue;
-      }
-
-      upload([file]);
-    }
-  };
-
-  const upload = (files: File[]) => {
-    const loading = toastLoading(trans("loading"), trans("uploading"));
-
-    const formData = new FormData();
-
-    for (const file of files) {
-      formData.append("uploads[]", file);
-    }
-
-    uploadFiles(formData)
-      .then(response => {
-        const files = uploadsHandler.resolveResponse(response);
-
-        editor.view.focus();
-
-        editor.commands.insertContent(`<img src="${files[0].url}" /> <br />`);
-
-        loading.success(trans("success"), trans("filesUploaded"));
-      })
-      .catch(error => {
-        loading.error(trans("error"), parseError(error));
-      });
-  };
-
   return (
     <div
-      className="richTextEditorRoot"
+      className={classes.richTextEditorRoot}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}

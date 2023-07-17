@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { RichTextEditor, useRichTextEditorContext } from "@mantine/tiptap";
+import { trans } from "@mongez/localization";
 import {
   IconCheck,
   IconCircleOff,
@@ -162,8 +163,8 @@ export function BackgroundColorButton({
           style={{
             backgroundColor: currentColor,
           }}
-          aria-label={labels.colorPickerControlLabel}
-          title={labels.colorPickerControlLabel}
+          title={trans("rte.backgroundColor")}
+          aria-label={trans("rte.backgroundColor")}
           onClick={toggle}>
           <ColorSwatch color="#FFF" size={14} unstyled={unstyled} />
         </RichTextEditor.Control>
